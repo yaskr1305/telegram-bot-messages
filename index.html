@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отримані повідомлення</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .message {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Отримані повідомлення</h1>
+    <div id="messages"></div>
+
+    <script>
+        async function fetchMessages() {
+            const response = await fetch('https://api.jsonbin.io/v3/b/666b36ebacd3cb34a8570fcc/latest', {
+                headers: {'X-Master-Key': '$2a$10$54tK9WWzZDMHYr2w4V22rOIQMY/NfUt7LzqAS4f1qQcxdEl/ylxg2'}
+            });
+            const data = await response.json();
+            const messages = data.record;
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = '';  // Clear previous messages
+
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message';
+                messageDiv.innerHTML = `<strong>User ID:</strong> ${msg.user_id} <br> <strong>Message:</strong> ${msg.message}`;
+                messagesContainer.appendChild(messageDiv);
+            });
+        }
+
+        // Get messages on page load
+        window.onload = fetchMessages;
+    </script>
+</body>
+</html>
